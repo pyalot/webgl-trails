@@ -1,5 +1,6 @@
 fs = {}
 
+'''
 makeURL = (blob) ->
     return URL.createObjectURL blob
 
@@ -7,9 +8,17 @@ makeBlob = (data, type) ->
     builder = new BlobBuilder()
     builder.append(data)
     return builder.getBlob(type)
+'''
 
-window.getURL = (data) ->
-    blob = makeBlob data
+makeURL = (blob) ->
+    return URL.createObjectURL blob
+
+makeBlob = (data, type) ->
+    blob = new Blob([data], type:type)
+    return blob
+
+window.getURL = (data, mime) ->
+    blob = makeBlob data, mime
     return makeURL blob
 
 resolvePath = (base, path) ->
@@ -160,13 +169,13 @@ window.loader =
                     dst = new Uint8Array storage
                     src = new Uint8Array data, 8+length+info.offset, info.size
                     dst.set src
-                    dst = dst.buffer
+                    #dst = dst.buffer
 
                     if hooks
                         for matcher, decode of hooks
                             if name.match(matcher)
                                 decoding += 1
-                                decode dst, (result) ->
+                                decode name, dst, (result) ->
                                     decoded += 1
                                     files[name] = result
                                     if progress then progress(0.5+(decoded/decoding)*0.5, 'decode')

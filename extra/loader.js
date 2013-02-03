@@ -4,20 +4,24 @@
 
   fs = {};
 
+  'makeURL = (blob) ->\n    return URL.createObjectURL blob\n\nmakeBlob = (data, type) ->\n    builder = new BlobBuilder()\n    builder.append(data)\n    return builder.getBlob(type)';
+
+
   makeURL = function(blob) {
     return URL.createObjectURL(blob);
   };
 
   makeBlob = function(data, type) {
-    var builder;
-    builder = new BlobBuilder();
-    builder.append(data);
-    return builder.getBlob(type);
+    var blob;
+    blob = new Blob([data], {
+      type: type
+    });
+    return blob;
   };
 
-  window.getURL = function(data) {
+  window.getURL = function(data, mime) {
     var blob;
-    blob = makeBlob(data);
+    blob = makeBlob(data, mime);
     return makeURL(blob);
   };
 
@@ -226,13 +230,12 @@
             dst = new Uint8Array(storage);
             src = new Uint8Array(data, 8 + length + info.offset, info.size);
             dst.set(src);
-            dst = dst.buffer;
             if (hooks) {
               for (matcher in hooks) {
                 decode = hooks[matcher];
                 if (name.match(matcher)) {
                   decoding += 1;
-                  decode(dst, function(result) {
+                  decode(name, dst, function(result) {
                     decoded += 1;
                     files[name] = result;
                     if (progress) {

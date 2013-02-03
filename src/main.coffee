@@ -2,13 +2,21 @@ audio = require 'audio'
 loading = require 'loading'
 Shader = require 'webgl/shader'
 
+mimes = {
+    'png': 'image/png'
+    'jpg': 'image/jpeg'
+    'jpeg': 'image/jpeg'
+    'gif': 'image/gif'
+}
+
 load_hooks =
-    '\.jpg$|\.jpeg$|\.gif$|\.png': (buffer, callback) ->
+    '\.jpg$|\.jpeg$|\.gif$|\.png': (name, buffer, callback) ->
+        mime = mimes[name.split('.').pop()]
         image = new Image()
-        image.src = getURL(buffer)
+        image.src = getURL(buffer, mime)
         image.onload = ->
             callback image
-    '\.mpg$|\.ogg$|\.wav$': (buffer, callback) ->
+    '\.mpg$|\.ogg$|\.wav$': (name, buffer, callback) ->
         audio.decode buffer, (result) ->
             callback result
     '\.shader$': (source, callback) ->
