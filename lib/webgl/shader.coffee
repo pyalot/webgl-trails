@@ -25,9 +25,6 @@ return class Shader
         directives = [
             'precision highp int;',
             'precision highp float;',
-            'precision highp vec2;',
-            'precision highp vec3;',
-            'precision highp vec4;',
         ].join('\n') + '\n'
 
         shaders.fragment = directives + shaders.global + shaders.fragment
