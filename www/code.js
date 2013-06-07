@@ -1863,15 +1863,15 @@ MouseDrag = (function() {
     });
     $(document).bind('touchstart', function(event) {
       var touch;
-      event.preventDefault();
       touch = event.originalEvent.touches[0];
       _this.pressed = true;
       _this.lx = touch.pageX;
-      return _this.ly = touch.pageY;
+      _this.ly = touch.pageY;
+      return void 0;
     });
     $(document).bind('touchend', function(event) {
-      event.preventDefault();
-      return _this.pressed = false;
+      _this.pressed = false;
+      return void 0;
     });
     $(document).bind('touchmove', function(event) {
       var touch, x, y;
@@ -1883,8 +1883,9 @@ MouseDrag = (function() {
         _this.x += x - _this.lx;
         _this.y += y - _this.ly;
         _this.lx = x;
-        return _this.ly = y;
+        _this.ly = y;
       }
+      return void 0;
     });
     $(document).mousemove(function(event) {
       var x, y;

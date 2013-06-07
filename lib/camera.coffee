@@ -31,15 +31,17 @@ class MouseDrag
             return undefined
 
         $(document).bind 'touchstart', (event) =>
-            event.preventDefault()
             touch = event.originalEvent.touches[0]
             @pressed = true
             @lx = touch.pageX
             @ly = touch.pageY
 
+            return undefined
+
         $(document).bind 'touchend', (event) =>
-            event.preventDefault()
             @pressed = false
+
+            return undefined
 
         $(document).bind 'touchmove', (event) =>
             event.preventDefault()
@@ -51,6 +53,8 @@ class MouseDrag
                 @y += y - @ly
                 @lx = x
                 @ly = y
+            
+            return undefined
 
         $(document).mousemove (event) =>
             if @pressed and event.which == @which
