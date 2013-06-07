@@ -23,8 +23,13 @@ return class Shader
                 shaders[type] += '#line ' + i + '\n' + line + '\n'
 
         directives = [
+            '#ifdef GL_FRAGMENT_PRECISION_HIGH',
             'precision highp int;',
             'precision highp float;',
+            '#else',
+            'precision mediump int;',
+            'precision mediump float;',
+            '#endif',
         ].join('\n') + '\n'
 
         shaders.fragment = directives + shaders.global + shaders.fragment

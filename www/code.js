@@ -1861,6 +1861,31 @@ MouseDrag = (function() {
       _this.pressed = false;
       return void 0;
     });
+    $(document).bind('touchstart', function(event) {
+      var touch;
+      event.preventDefault();
+      touch = event.originalEvent.touches[0];
+      _this.pressed = true;
+      _this.lx = touch.pageX;
+      return _this.ly = touch.pageY;
+    });
+    $(document).bind('touchend', function(event) {
+      event.preventDefault();
+      return _this.pressed = false;
+    });
+    $(document).bind('touchmove', function(event) {
+      var touch, x, y;
+      event.preventDefault();
+      if (_this.pressed) {
+        touch = event.originalEvent.touches[0];
+        x = touch.pageX;
+        y = touch.pageY;
+        _this.x += x - _this.lx;
+        _this.y += y - _this.ly;
+        _this.lx = x;
+        return _this.ly = y;
+      }
+    });
     $(document).mousemove(function(event) {
       var x, y;
       if (_this.pressed && event.which === _this.which) {
@@ -2922,7 +2947,7 @@ return Shader = (function() {
         shaders[type] += '#line ' + i + '\n' + line + '\n';
       }
     }
-    directives = ['precision highp int;', 'precision highp float;'].join('\n') + '\n';
+    directives = ['#ifdef GL_FRAGMENT_PRECISION_HIGH', 'precision highp int;', 'precision highp float;', '#else', 'precision mediump int;', 'precision mediump float;', '#endif'].join('\n') + '\n';
     shaders.fragment = directives + shaders.global + shaders.fragment;
     shaders.vertex = directives + shaders.global + shaders.vertex;
     return shaders;
